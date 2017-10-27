@@ -3,22 +3,24 @@ require 'rspec'
 class ChangeMachine
 
   def change(cents)
-    #jacque start
-    return [10,5] if cents == 15
-    return [10,1,1,1,1] if cents == 14
-    return [10,1,1,1] if cents == 13
-    return [10,1,1] if cents == 12
-    return [10,1] if cents == 11
-    return [10] if cents == 10
-    return [5,1,1,1,1] if cents == 9
-    return [5,1,1,1] if cents == 8
-    return [5,1,1] if cents == 7
-    return [5,1] if cents == 6
-    return [5] if cents == 5
-    return [1,1,1,1] if cents == 4
-    return [1,1,1] if cents == 3
-    return [1,1] if cents == 2
-    return [1] if cents == 1
+    final_change = []
+    if cents > 0
+      counter = cents / 25
+      counter.floor.times {final_change << 25}
+      cents = cents - (25 * counter.floor)
+
+      counter = cents / 10
+      counter.floor.times {final_change << 10}
+      cents = cents - (10 * counter.floor)
+
+      counter = cents / 5
+      counter.floor.times {final_change << 5}
+      cents = cents - (5 * counter.floor)
+
+      counter = cents / 1
+      counter.times {final_change << 1}
+    end
+    return final_change
   end
 end
 
@@ -88,5 +90,54 @@ RSpec.describe ChangeMachine do
     it 'should return [10,5,1] if cents is 16' do
       expect(change_machine.change(16)).to eq([10,5,1])
     end
+
+    it 'should return [10,5,1,1] if cents is 17' do
+      expect(change_machine.change(17)).to eq([10,5,1,1])
+    end
+
+    it 'should return [10,5,1,1,1] if cents is 18' do
+      expect(change_machine.change(18)).to eq([10,5,1,1,1])
+    end
+
+    it 'should return [10,5,1,1,1,1] if cents is 19' do
+      expect(change_machine.change(19)).to eq([10,5,1,1,1,1])
+    end
+
+    it 'should return [10,10] if cents is 20' do
+      expect(change_machine.change(20)).to eq([10,10])
+    end
+
+    it 'should return [10,10,1] if cents is 21' do
+      expect(change_machine.change(21)).to eq([10,10,1])
+    end
+
+    it 'should return [10,10,1,1] if cents is 22' do
+      expect(change_machine.change(22)).to eq([10,10,1,1])
+    end
+
+    it 'should return [10,10,1,1,1] if cents is 23' do
+      expect(change_machine.change(23)).to eq([10,10,1,1,1])
+    end
+
+    it 'should return [10,10,1,1,1,1] if cents is 24' do
+      expect(change_machine.change(24)).to eq([10,10,1,1,1,1])
+    end
+
+    it 'should return [25] if cents is 25' do
+      expect(change_machine.change(25)).to eq([25])
+    end
+
+    it 'should return [25,25] if cents is 50' do
+      expect(change_machine.change(50)).to eq([25,25])
+    end  
+
+    it 'should return [25,25,1] if cents is 51' do
+      expect(change_machine.change(51)).to eq([25,25,1])
+    end
+
+    it 'should return [25, 25, 25, 25, 10, 5, 1, 1, 1, 1] if cents is 119' do
+      expect(change_machine.change(119)).to eq([25, 25, 25, 25, 10, 5, 1, 1, 1, 1])
+    end
+
   end
 end
